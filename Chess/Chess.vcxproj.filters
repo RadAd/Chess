@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="WinMain.cpp" />
+    <ClCompile Include="Rad\Dialog.cpp">
+      <Filter>Rad</Filter>
+    </ClCompile>
+    <ClCompile Include="Rad\Log.cpp">
+      <Filter>Rad</Filter>
+    </ClCompile>
+    <ClCompile Include="Rad\MessageHandler.cpp">
+      <Filter>Rad</Filter>
+    </ClCompile>
+    <ClCompile Include="Rad\Window.cpp">
+      <Filter>Rad</Filter>
+    </ClCompile>
+    <ClCompile Include="Rad\WinError.cpp">
+      <Filter>Rad</Filter>
+    </ClCompile>
+    <ClCompile Include="FenDlg.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Rad\Dialog.h">
+      <Filter>Rad</Filter>
+    </ClInclude>
+    <ClInclude Include="Rad\Format.h">
+      <Filter>Rad</Filter>
+    </ClInclude>
+    <ClInclude Include="Rad\Log.h">
+      <Filter>Rad</Filter>
+    </ClInclude>
+    <ClInclude Include="Rad\MemoryPlus.h">
+      <Filter>Rad</Filter>
+    </ClInclude>
+    <ClInclude Include="Rad\MessageHandler.h">
+      <Filter>Rad</Filter>
+    </ClInclude>
+    <ClInclude Include="Rad\SourceLocation.h">
+      <Filter>Rad</Filter>
+    </ClInclude>
+    <ClInclude Include="Rad\Window.h">
+      <Filter>Rad</Filter>
+    </ClInclude>
+    <ClInclude Include="Rad\Windowxx.h">
+      <Filter>Rad</Filter>
+    </ClInclude>
+    <ClInclude Include="Rad\WinError.h">
+      <Filter>Rad</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="DoubleBufWindow.h" />
+    <ClInclude Include="WindowsUtils.h" />
+    <ClInclude Include="FenDlg.h" />
+    <ClInclude Include="StatusBarPlus.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Rad">
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{43986662-5590-44ef-98b2-010697a74d02}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Chess.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Res\270px-Chess_Pieces_Sprite.svg.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Res\320px-Chess_Pieces_Sprite.svg.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Res\640px-Chess_Pieces_Sprite.svg.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Res\Fa-Team-Fontawesome-FontAwesome-Chess-Knight.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
