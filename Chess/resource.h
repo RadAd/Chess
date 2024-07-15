@@ -7,7 +7,6 @@
 #define IDB_PNG3                        103
 #define IDI_ICON1                       104
 #define IDR_MENU1                       105
-#define IDC_EDIT1                       1000
 #define IDC_FEN                         1000
 #define IDD_FEN                         28444
 #define ID_GAME_RESTART                 40001

@@ -7,7 +7,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include <Windows.h>
+#include <winres.h>
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -31,7 +31,7 @@ END
 
 2 TEXTINCLUDE 
 BEGIN
-    "#include <Windows.h>\0"
+    "#include <winres.h>\0"
 END
 
 3 TEXTINCLUDE 
