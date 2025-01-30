@@ -7,6 +7,7 @@ class Board;
 enum class Colour;
 
 std::set<Pos> GetMoves(const Board& b, const Pos p, const bool DoCheckCheck = true);
+std::set<Pos> GetThreats(const Board& b, const Pos p);
 std::set<Pos> GetCheckThreats(const Board& b, const Colour c);
 Board DoMove(const Board& b, const Pos from, const Pos to, bool* fCastle = nullptr);
 

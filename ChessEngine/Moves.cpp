@@ -126,6 +126,31 @@ std::set<Pos> GetMoves(const Board& b, const Pos p, const bool DoCheckCheck)
     return m;
 }
 
+std::set<Pos> GetThreats(const Board& b, const Pos po)
+{
+    _ASSERT(Board::Valid(po));
+    std::set<Pos> threats;
+
+    auto piece = b.GetPiece(po);
+    if (piece == PieceDef::empty)
+        return threats;
+
+    const Colour otherc = OtherColour(piece.c);
+
+    for (const Piece p : AllPieces)
+    {
+        const PieceDef pd = { otherc, p };
+        const std::set<Pos> ps = b.GetPieces(pd);
+        for (const auto p : ps)
+        {
+            if (CanMove(b, p, po))
+                threats.insert(p);
+        }
+    }
+
+    return threats;
+}
+
 std::set<Pos> GetCheckThreats(const Board& b, const Colour c)
 {
     _ASSERTE(c != Colour::None);
@@ -155,6 +180,8 @@ std::set<Pos> GetCheckThreats(const Board& b, const Colour c)
 
 Board DoMove(const Board& bo, const Pos from, const Pos to, bool* fCastle)
 {
+    _ASSERT(Board::Valid(from));
+    _ASSERT(Board::Valid(to));
     Board b = bo;
 
     const PieceDef pd = b.GetPiece(from);

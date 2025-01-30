@@ -123,6 +123,7 @@ private:
         Gdiplus::SolidBrush b2(Gdiplus::Color(119, 153, 84));
         Gdiplus::SolidBrush bselected(Gdiplus::Color(187, 202, 42));
         Gdiplus::SolidBrush bmove(Gdiplus::Color(245, 245, 104));
+        Gdiplus::SolidBrush bthreat(Gdiplus::Color(245, 0, 0));
 
         const bool bCapture = GetCapture() == *this;
 
@@ -132,6 +133,7 @@ private:
             {
                 const Gdiplus::Rect r(offsetx + p.x * width, offsety + p.y * height, width, height);
                 g.FillRectangle(p == m_mouse ? &bselected
+                            : m_threats.find(p) != m_threats.end() ? &bthreat
                             : m_moves.find(p) != m_moves.end() ? &bmove
                             : (p.x + p.y) % 2 == 0 ? &b1
                             : &b2, r);
@@ -177,6 +179,11 @@ private:
         const int offsetx = (Width(rcClient) - (width * Board::Width)) / 2;
         const int offsety = (Height(rcClient) - (height * Board::Height)) / 2;
 
+        if ((x - offsetx) < 0)
+            x -= width;
+        if ((y - offsety) < 0)
+            y -= height;
+
         return { (x - offsetx) / width, (y - offsety) / height };
     }
 
@@ -191,6 +198,7 @@ private:
     Colour m_colour = Colour::White;
     Pos m_mouse;
     std::set<Pos> m_moves;
+    std::set<Pos> m_threats;
 
     std::unique_ptr<Gdiplus::Bitmap> m_bmp;
     std::map<PieceDef, std::unique_ptr<Gdiplus::CachedBitmap>> m_cbmp;
@@ -294,7 +302,16 @@ void RootWindow::OnMouseMove(int x, int y, UINT keyFlags)
     }
     else
     {
-        StatusBar_SetText(m_hStatus, m_board.Valid(p) ? (toStr(m_mouse) + TEXT(" -> ") + toStr(p)).c_str() : toStr(m_mouse).c_str(), 1);
+        if (Board::Valid(p))
+        {
+            const Board nb = DoMove(m_board, m_mouse, p);
+            m_threats = GetThreats(nb, p);
+            StatusBar_SetText(m_hStatus, m_board.Valid(p) ? (toStr(m_mouse) + TEXT(" -> ") + toStr(p)).c_str() : toStr(m_mouse).c_str(), 1);
+        }
+        else
+        {
+            m_threats.clear();
+        }
         CHECK_LE(InvalidateRect(*this, nullptr, TRUE));
     }
 }
@@ -314,7 +331,9 @@ void RootWindow::OnLButtonUp(int x, int y, UINT keyFlags)
         {
             m_board = DoMove(m_board, m_mouse, p);
             SetColour(OtherColour(m_colour));
+            m_moves.clear();
         }
+        m_threats.clear();
         CHECK_LE(InvalidateRect(*this, nullptr, TRUE));
     }
     ReleaseCapture();
