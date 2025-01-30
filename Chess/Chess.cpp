@@ -136,6 +136,7 @@ private:
                             : (p.x + p.y) % 2 == 0 ? &b1
                             : &b2, r);
             }
+        auto itMovingPiece = m_cbmp.end();
         for (p.y = 0; p.y < Board::Height; ++p.y)
             for (p.x = 0; p.x < Board::Width; ++p.x)
             {
@@ -149,12 +150,16 @@ private:
                     }
                     else
                     {
-                        POINT pt;
-                        GetCursorPos(&pt);
-                        ScreenToClient(*this, &pt);
-                        g.DrawCachedBitmap(itPiece->second.get(), pt.x - width / 2, pt.y - height / 2);
+                        itMovingPiece = itPiece;
                     }
             }
+        if (itMovingPiece != m_cbmp.end())
+        {
+            POINT pt;
+            GetCursorPos(&pt);
+            ScreenToClient(*this, &pt);
+            g.DrawCachedBitmap(itMovingPiece->second.get(), pt.x - width / 2, pt.y - height / 2);
+        }
     }
 
     static LPCTSTR ClassName() { return TEXT("Chess"); }
@@ -220,6 +225,9 @@ void RootWindow::OnDestroy()
 
 void RootWindow::OnSize(const UINT state, const int cx, const int cy)
 {
+    if (cx <= 0 || cy <= 0)
+        return;
+
     DoubleBufWindow::OnSize(state, cx, cy);
 
     StatusBar_Reposition(m_hStatus);
