@@ -143,7 +143,7 @@ std::set<Pos> GetThreats(const Board& b, const Pos po)
         const std::set<Pos> ps = b.GetPieces(pd);
         for (const auto p : ps)
         {
-            if (CanMove(b, p, po))
+            if (CanMove(b, po, p))
                 threats.insert(p);
         }
     }
