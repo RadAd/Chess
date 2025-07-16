@@ -10,7 +10,7 @@
 #include "Rad/Window.h"
 #include "Rad/Dialog.h"
 #include "Rad/Windowxx.h"
-#include "Rad/Log.h"
+#include "Rad/WinError.h"
 #include "DoubleBufWindow.h"
 #include "StatusBarPlus.h"
 
