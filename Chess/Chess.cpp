@@ -79,20 +79,24 @@ inline Gdiplus::Bitmap* LoadImageFromResource(HMODULE hMod, const wchar_t* resid
 
 class RootWindow : public DoubleBufWindow
 {
-    friend WindowManager<RootWindow>;
 public:
-    static ATOM Register() { return WindowManager<RootWindow>::Register(); }
-    static RootWindow* Create() { return WindowManager<RootWindow>::Create(); }
+    friend WindowManager<RootWindow>;
+    struct Class : public MainClass
+    {
+        static LPCTSTR ClassName() { return TEXT("RadChess"); }
+
+        static void GetWndClass(WNDCLASS& cs)
+        {
+            MainClass::GetWndClass(cs);
+            //cs.hbrBackground = GetStockBrush(BLACK_BRUSH);
+            cs.hbrBackground = CreateSolidBrush(RGB(128, 128, 128));
+            cs.hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_ICON1));
+        }
+    };
+public:
+    static RootWindow* Create() { return WindowManager<RootWindow>::Create(NULL, TEXT("Chess")); }
 
 protected:
-    static void GetCreateWindow(CREATESTRUCT& cs);
-    static void GetWndClass(WNDCLASS& cs)
-    {
-        Window::GetWndClass(cs);
-        //cs.hbrBackground = GetStockBrush(BLACK_BRUSH);
-        cs.hbrBackground = CreateSolidBrush(RGB(128, 128,128));
-        cs.hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_ICON1));
-    }
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 
 private:
@@ -164,8 +168,6 @@ private:
         }
     }
 
-    static LPCTSTR ClassName() { return TEXT("Chess"); }
-
     Pos GetBoardPos(int x, int y) const
     {
         RECT rcStatus;
@@ -205,13 +207,6 @@ private:
 
     HWND m_hStatus = NULL;
 };
-
-void RootWindow::GetCreateWindow(CREATESTRUCT& cs)
-{
-    Window::GetCreateWindow(cs);
-    cs.lpszName = TEXT("Chess");
-    cs.style = WS_OVERLAPPEDWINDOW;
-}
 
 BOOL RootWindow::OnCreate(const LPCREATESTRUCT lpCreateStruct)
 {
@@ -393,14 +388,15 @@ LRESULT RootWindow::HandleMessage(const UINT uMsg, const WPARAM wParam, const LP
 
 bool Run(_In_ const LPCTSTR lpCmdLine, _In_ const int nShowCmd)
 {
-    RadLogInitWnd(NULL, "Chess", TEXT("Chess"));
+    RadLogInitWnd(NULL, "Chess", L"Chess");
 
-    CHECK_LE_RET(RootWindow::Register(), false);
+    //CHECK_LE_RET(Register<MainClass>(), false);
+    CHECK_LE_RET(Register<RootWindow::Class>(), false);
 
     RootWindow* prw = RootWindow::Create();
     CHECK_LE_RET(prw != nullptr, false);
 
-    RadLogInitWnd(*prw, "Chess", TEXT("Chess"));
+    RadLogInitWnd(*prw, nullptr, nullptr);
     ShowWindow(*prw, nShowCmd);
 
     return true;
