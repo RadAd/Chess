@@ -79,7 +79,6 @@ inline Gdiplus::Bitmap* LoadImageFromResource(HMODULE hMod, const wchar_t* resid
 
 class RootWindow : public DoubleBufWindow
 {
-public:
     friend WindowManager<RootWindow>;
     struct Class : public MainClass
     {
@@ -94,6 +93,7 @@ public:
         }
     };
 public:
+    static ATOM Register() { return ::Register<Class>(); }
     static RootWindow* Create() { return WindowManager<RootWindow>::Create(NULL, TEXT("Chess")); }
 
 protected:
@@ -390,8 +390,7 @@ bool Run(_In_ const LPCTSTR lpCmdLine, _In_ const int nShowCmd)
 {
     RadLogInitWnd(NULL, "Chess", L"Chess");
 
-    //CHECK_LE_RET(Register<MainClass>(), false);
-    CHECK_LE_RET(Register<RootWindow::Class>(), false);
+    CHECK_LE_RET(RootWindow::Register(), false);
 
     RootWindow* prw = RootWindow::Create();
     CHECK_LE_RET(prw != nullptr, false);
