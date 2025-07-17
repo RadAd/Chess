@@ -108,6 +108,8 @@ private:
     void OnLButtonUp(int x, int y, UINT keyFlags);
     void OnContextMenu(HWND hWndContext, UINT xPos, UINT yPos);
     void OnCommand(int id, HWND hWndCtl, UINT codeNotify);
+    void OnCommandGameRestart(int id, HWND hWndCtl, UINT codeNotify);
+    void OnCommandGameFen(int id, HWND hWndCtl, UINT codeNotify);
 
     void OnDraw(const PAINTSTRUCT* pps) const override
     {
@@ -341,27 +343,33 @@ void RootWindow::OnContextMenu(HWND hWndContext, UINT xPos, UINT yPos)
     DestroyMenu(hMenu);
 }
 
+#define HANDLE_CMD(id, fn)        case (id): (fn)(id, hWndCtl, codeNotify); break
+
 void RootWindow::OnCommand(int id, HWND hWndCtl, UINT codeNotify)
 {
     switch (id)
     {
-    case ID_GAME_RESTART:
-        m_board = Board::Create();
-        SetColour(Colour::White);
-        CHECK_LE(InvalidateRect(*this, nullptr, TRUE));
-        break;
-
-    case ID_GAME_FEN:
-    {
-        FenDlg fendlg;
-        if (fendlg.DoModal(*this) == IDOK)
-        {
-            m_board = Board::CreateFromFen(fendlg.m_fen, m_colour);
-            SetColour(m_colour);
-            CHECK_LE(InvalidateRect(*this, nullptr, TRUE));
-        }
-        break;
+        HANDLE_CMD(ID_GAME_RESTART, OnCommandGameRestart);
+        HANDLE_CMD(ID_GAME_FEN, OnCommandGameFen);
+    default: SetHandled(false); break;
     }
+}
+
+void RootWindow::OnCommandGameRestart(int id, HWND hWndCtl, UINT codeNotify)
+{
+    m_board = Board::Create();
+    SetColour(Colour::White);
+    CHECK_LE(InvalidateRect(*this, nullptr, TRUE));
+}
+
+void RootWindow::OnCommandGameFen(int id, HWND hWndCtl, UINT codeNotify)
+{
+    FenDlg fendlg;
+    if (fendlg.DoModal(*this) == IDOK)
+    {
+        m_board = Board::CreateFromFen(fendlg.m_fen, m_colour);
+        SetColour(m_colour);
+        CHECK_LE(InvalidateRect(*this, nullptr, TRUE));
     }
 }
 
