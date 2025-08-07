@@ -106,12 +106,14 @@ std::set<Pos> GetMoves(const Board& b, const Pos p, const bool DoCheckCheck)
                 if (b.GetPiece(Pos({ 0, row })) == PieceDef({ pd.c, Piece::Rook })
                     && b.GetPiece(Pos({ 1, row })) == PieceDef::empty
                     && b.GetPiece(Pos({ 2, row })) == PieceDef::empty
-                    && b.GetPiece(Pos({ 3, row })) == PieceDef::empty) // TODO AND hasn't moved
-                    m.insert(p + Pos({ -2, 0 }));
+                    && b.GetPiece(Pos({ 3, row })) == PieceDef::empty
+                    && (DoCheckCheck && IsInCheck(DoMove(b, p, p + Pos({ -1, 0 })), pd.c))) // TODO AND hasn't moved
+                    InsertIfNot(m, b, p, p + Pos({ -2, 0 }), pd.c, DoCheckCheck);
                 if (b.GetPiece(Pos({ Board::Width - 1, row })) == PieceDef({ pd.c, Piece::Rook })
                     && b.GetPiece(Pos({ 5, row })) == PieceDef::empty
-                    && b.GetPiece(Pos({ 6, row })) == PieceDef::empty) // TODO AND hasn't moved
-                    m.insert(p + Pos({ 2, 0 }));
+                    && b.GetPiece(Pos({ 6, row })) == PieceDef::empty
+                    && (DoCheckCheck && IsInCheck(DoMove(b, p, p + Pos({ 1, 0 })), pd.c))) // TODO AND hasn't moved
+                    InsertIfNot(m, b, p, p + Pos({ 2, 0 }), pd.c, DoCheckCheck);
             }
         }
         break;
