@@ -228,7 +228,7 @@ void test_move_en_passant(const Colour c, const bool print = false)
     ASSERT_EQUAL(m.size(), 2);
 }
 
-void test_move_castle_check(const Colour c, const bool print = false)
+void test_move_castle_check(const Colour c, const int col, const int moves, const bool print = false)
 {
     Board b;
     const int row = c == Colour::White ? Board::Height - 1 : 0;
@@ -236,11 +236,11 @@ void test_move_castle_check(const Colour c, const bool print = false)
     b.SetPiece(p, { c, Piece::King });
     b.SetPiece(Pos({ 0, row }), { c, Piece::Rook });
     b.SetPiece(Pos({ Board::Width - 1, row }), { c, Piece::Rook });
-    b.SetPiece(Pos({ 4, 4 }), { OtherColour(c), Piece::Rook });
+    b.SetPiece(Pos({ col, 4 }), { OtherColour(c), Piece::Rook });
 
     const std::set<Pos> m = GetMoves(b, p);
     if (print) PrintBoard(b, p, m);
-    ASSERT_EQUAL(m.size(), 4);
+    ASSERT_EQUAL(m.size(), moves);
 }
 
 void test()
@@ -302,8 +302,12 @@ void test()
     test_move_castle(Colour::White);
     test_move_castle(Colour::Black);
 
-    test_move_castle_check(Colour::White);
-    test_move_castle_check(Colour::Black);
+    test_move_castle_check(Colour::White, 4, 4);
+    test_move_castle_check(Colour::Black, 4, 4);
+    test_move_castle_check(Colour::White, 3, 4);
+    test_move_castle_check(Colour::Black, 3, 4);
+    test_move_castle_check(Colour::White, 2, 6);
+    test_move_castle_check(Colour::Black, 2, 6);
 
     //test_known_move_stats(true);
     //test_peterellisjones();

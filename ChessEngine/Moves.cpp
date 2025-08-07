@@ -103,17 +103,18 @@ std::set<Pos> GetMoves(const Board& b, const Pos p, const bool DoCheckCheck)
             const int row = pd.c == Colour::White ? Board::Height - 1 : 0;
             if (p == Pos({ 4, row }) && (!DoCheckCheck || !IsInCheck(b, pd.c)))
             {
+                bool c1 = IsInCheck(DoMove(b, p, p + Pos({ -1, 0 })), pd.c);
                 if (b.GetPiece(Pos({ 0, row })) == PieceDef({ pd.c, Piece::Rook })
                     && b.GetPiece(Pos({ 1, row })) == PieceDef::empty
                     && b.GetPiece(Pos({ 2, row })) == PieceDef::empty
                     && b.GetPiece(Pos({ 3, row })) == PieceDef::empty
-                    && (DoCheckCheck && IsInCheck(DoMove(b, p, p + Pos({ -1, 0 })), pd.c))) // TODO AND hasn't moved
-                    InsertIfNot(m, b, p, p + Pos({ -2, 0 }), pd.c, DoCheckCheck);
+                    && (!DoCheckCheck || !IsInCheck(DoMove(b, p, p + Pos({ -1, 0 })), pd.c))) // TODO AND hasn't moved
+                    InsertIf(m, b, p, p + Pos({ -2, 0 }), Colour::None, DoCheckCheck);
                 if (b.GetPiece(Pos({ Board::Width - 1, row })) == PieceDef({ pd.c, Piece::Rook })
                     && b.GetPiece(Pos({ 5, row })) == PieceDef::empty
                     && b.GetPiece(Pos({ 6, row })) == PieceDef::empty
-                    && (DoCheckCheck && IsInCheck(DoMove(b, p, p + Pos({ 1, 0 })), pd.c))) // TODO AND hasn't moved
-                    InsertIfNot(m, b, p, p + Pos({ 2, 0 }), pd.c, DoCheckCheck);
+                    && (!DoCheckCheck || !IsInCheck(DoMove(b, p, p + Pos({ 1, 0 })), pd.c))) // TODO AND hasn't moved
+                    InsertIf(m, b, p, p + Pos({ 2, 0 }), Colour::None, DoCheckCheck);
             }
         }
         break;
